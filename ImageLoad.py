@@ -30,6 +30,6 @@ for i in tqdm(df.index):
 
 df2 = df.copy()
 df2["IMG"] = imgs
-df2["IMG"] = df2["IMG"].dropna(axis=0)
+
 
 
