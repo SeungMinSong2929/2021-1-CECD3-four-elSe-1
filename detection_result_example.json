@@ -1,0 +1,20 @@
+{
+    "object" : [
+        {
+            "location":[
+                [ 41.0,233.5],
+                [ 518.0, 517.18]
+            ],
+            "tag":"Bed"
+        },
+        {
+            "location":[[50.4, 250.3],[ 90.1, 432.2]],
+            "tag": "Cabinet"
+        },
+        {
+            "location":[[100.6, 52.4],[340.2, 256.4]],
+            "tag": "Cabinet"
+        }
+    ],
+    "IMG_URL":"https://image.hanssem.com/hsimg//gds/550/74/74811_A1.jpg"
+}
