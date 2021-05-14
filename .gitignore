@@ -1,11 +1,7 @@
 *.csv
-
 *.png
 *.p
-<<<<<<< HEAD
 *.jpg
-=======
 *.zip
 *.jpg
 *.h5
->>>>>>> master
