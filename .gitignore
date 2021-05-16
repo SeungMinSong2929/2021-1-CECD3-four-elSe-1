@@ -5,3 +5,5 @@
 *.zip
 *.jpg
 *.h5
+*.pkl
+*.npy
