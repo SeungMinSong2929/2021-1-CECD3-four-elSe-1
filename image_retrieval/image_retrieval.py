@@ -19,7 +19,7 @@ from src.autoencoder import AutoEncoder
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "convAE"  # try: "simpleAE", "convAE", "vgg19"
+    modelName = "vgg19"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -71,6 +71,33 @@ def run():
         print("Loading VGG19 pre-trained model...")
         model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
                                             input_shape=shape_img)
+
+        model.summary()
+
+        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
+        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
+        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
+        n_epochs = None
+    elif modelName in ["ResNet50v2"]:
+        print("Loading VGG19 pre-trained model...")
+        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
+        #                                     input_shape=shape_img)
+
+        model = tf.keras.applications.ResNet50V2(weights="imagenet", include_top=False, input_shape=shape_img)
+
+        model.summary()
+
+        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
+        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
+        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
+        n_epochs = None
+    elif modelName in ["IncepResNet"]:
+        print("Loading VGG19 pre-trained model...")
+        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
+        #                                     input_shape=shape_img)
+
+        model = tf.keras.applications.InceptionResNetV2(weights="imagenet", include_top=False, input_shape=shape_img)
+
         model.summary()
 
         shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
