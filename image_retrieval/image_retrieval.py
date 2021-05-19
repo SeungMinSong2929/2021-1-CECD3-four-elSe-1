@@ -19,7 +19,7 @@ from src.autoencoder import AutoEncoder
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "vgg19"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "ResNet50v2"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -181,9 +181,9 @@ def run():
         plot_query_retrieval(img_query, imgs_retrieval, outFile)
 
     # Plot t-SNE visualization
-    print("Visualizing t-SNE on training images...")
-    outFile = os.path.join(outDir, "{}_tsne.png".format(modelName))
-    plot_tsne(E_train_flatten, imgs_train, outFile)
+    # print("Visualizing t-SNE on training images...")
+    # outFile = os.path.join(outDir, "{}_tsne.png".format(modelName))
+    # plot_tsne(E_train_flatten, imgs_train, outFile)
 
 from multiprocessing import freeze_support
 if __name__ == "__main__":
