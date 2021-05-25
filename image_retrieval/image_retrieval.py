@@ -10,6 +10,7 @@
 import os
 import numpy as np
 import tensorflow as tf
+import keras
 from sklearn.neighbors import NearestNeighbors
 from src.CV_IO_utils import read_imgs_dir
 from src.CV_transform_utils import apply_transformer
@@ -69,7 +70,7 @@ def run():
 
         # Load pre-trained VGG19 model + higher level layers
         print("Loading VGG19 pre-trained model...")
-        model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
+        model = keras.applications.VGG19(weights='imagenet', include_top=False,
                                             input_shape=shape_img)
 
         model.summary()
@@ -83,7 +84,7 @@ def run():
         # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
         #                                     input_shape=shape_img)
 
-        model = tf.keras.applications.ResNet50V2(weights="imagenet", include_top=False, input_shape=shape_img)
+        model = keras.applications.ResNet50V2(weights="imagenet", include_top=False, input_shape=shape_img)
 
         model.summary()
 
@@ -96,7 +97,7 @@ def run():
         # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
         #                                     input_shape=shape_img)
 
-        model = tf.keras.applications.InceptionResNetV2(weights="imagenet", include_top=False, input_shape=shape_img)
+        model = keras.applications.InceptionResNetV2(weights="imagenet", include_top=False, input_shape=shape_img)
 
         model.summary()
 
