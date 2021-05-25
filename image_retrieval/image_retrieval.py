@@ -20,7 +20,7 @@ from src.autoencoder import AutoEncoder
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "ResNet50v2"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "convAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
