@@ -6,6 +6,7 @@
 import numpy as np
 import tensorflow as tf
 from src.utils import split
+import keras
 
 class AutoEncoder():
 
@@ -40,25 +41,25 @@ class AutoEncoder():
         if self.modelName == "simpleAE":
             encode_dim = 128
 
-            input = tf.keras.Input(shape=shape_img_flattened)
-            encoded = tf.keras.layers.Dense(encode_dim, activation='relu')(input)
+            input = keras.Input(shape=shape_img_flattened)
+            encoded = keras.layers.Dense(encode_dim, activation='relu')(input)
 
-            decoded = tf.keras.layers.Dense(shape_img_flattened[0], activation='sigmoid')(encoded)
+            decoded = keras.layers.Dense(shape_img_flattened[0], activation='sigmoid')(encoded)
 
         elif self.modelName == "convAE":
             n_hidden_1, n_hidden_2, n_hidden_3 = 16, 8, 8
             convkernel = (3, 3)  # convolution kernel
             poolkernel = (2, 2)  # pooling kernel
 
-            input = tf.keras.layers.Input(shape=shape_img) # (512, 512)
-            x = tf.keras.layers.Conv2D(n_hidden_1, convkernel, activation='relu', padding='same')(input) # (512, 512)
-            x = tf.keras.layers.MaxPooling2D(poolkernel, padding='same')(x)                              # (256, 256)
-            x = tf.keras.layers.Conv2D(n_hidden_2, convkernel, activation='relu', padding='same')(x)     # (256, 256)
-            x = tf.keras.layers.MaxPooling2D(poolkernel, padding='same')(x)                              # (128, 128)
-            x = tf.keras.layers.Conv2D(n_hidden_3, convkernel, activation='relu', padding='same')(x)     # (128, 128)
+            input = keras.layers.Input(shape=shape_img) # (512, 512)
+            x = keras.layers.Conv2D(n_hidden_1, convkernel, activation='relu', padding='same')(input) # (512, 512)
+            x = keras.layers.MaxPooling2D(poolkernel, padding='same')(x)                              # (256, 256)
+            x = keras.layers.Conv2D(n_hidden_2, convkernel, activation='relu', padding='same')(x)     # (256, 256)
+            x = keras.layers.MaxPooling2D(poolkernel, padding='same')(x)                              # (128, 128)
+            x = keras.layers.Conv2D(n_hidden_3, convkernel, activation='relu', padding='same')(x)     # (128, 128)
             encoded = tf.keras.layers.MaxPooling2D(poolkernel, padding='same')(x)                        # (64, 64)
 
-            x = tf.keras.layers.Conv2D(n_hidden_3, convkernel, activation='relu', padding='same')(encoded) # (64, 64)
+            x = keras.layers.Conv2D(n_hidden_3, convkernel, activation='relu', padding='same')(encoded) # (64, 64)
             x = tf.keras.layers.UpSampling2D(poolkernel)(x)                                                # (128, 128)
             x = tf.keras.layers.Conv2D(n_hidden_2, convkernel, activation='relu', padding='same')(x)       # (128, 128)
             x = tf.keras.layers.UpSampling2D(poolkernel)(x)                                                # (256,256)
