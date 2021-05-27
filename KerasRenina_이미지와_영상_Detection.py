@@ -20,8 +20,6 @@ import pickle
 import matplotlib.pyplot as plt
 import tensorflow.keras
 from PIL import Image
-get_ipython().run_line_magic('matplotlib', 'inline')
-
 
 # import keras
 import keras
