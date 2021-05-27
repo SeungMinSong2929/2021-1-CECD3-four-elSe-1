@@ -7,6 +7,7 @@
  query images, as well as the t-SNE visualizations.
 
 """
+from multiprocessing import freeze_support
 import os
 import numpy as np
 import tensorflow as tf
@@ -18,9 +19,10 @@ from src.CV_transform_utils import resize_img, normalize_img
 from src.CV_plot_utils import plot_query_retrieval, plot_tsne, plot_reconstructions
 from src.autoencoder import AutoEncoder
 
+
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "convAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "simpleAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -60,8 +62,10 @@ def run():
             n_epochs = 300
         elif modelName == "convAE":
             shape_img_resize = shape_img
-            input_shape_model = tuple([int(x) for x in model.encoder.input.shape[1:]])
-            output_shape_model = tuple([int(x) for x in model.encoder.output.shape[1:]])
+            input_shape_model = tuple([int(x)
+                                       for x in model.encoder.input.shape[1:]])
+            output_shape_model = tuple(
+                [int(x) for x in model.encoder.output.shape[1:]])
             n_epochs = 30
         else:
             raise Exception("Invalid modelName!")
@@ -71,7 +75,7 @@ def run():
         # Load pre-trained VGG19 model + higher level layers
         print("Loading VGG19 pre-trained model...")
         model = keras.applications.VGG19(weights='imagenet', include_top=False,
-                                            input_shape=shape_img)
+                                         input_shape=shape_img)
 
         model.summary()
 
@@ -84,7 +88,8 @@ def run():
         # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
         #                                     input_shape=shape_img)
 
-        model = keras.applications.ResNet50V2(weights="imagenet", include_top=False, input_shape=shape_img)
+        model = keras.applications.ResNet50V2(
+            weights="imagenet", include_top=False, input_shape=shape_img)
 
         model.summary()
 
@@ -97,7 +102,8 @@ def run():
         # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
         #                                     input_shape=shape_img)
 
-        model = keras.applications.InceptionResNetV2(weights="imagenet", include_top=False, input_shape=shape_img)
+        model = keras.applications.InceptionResNetV2(
+            weights="imagenet", include_top=False, input_shape=shape_img)
 
         model.summary()
 
@@ -126,12 +132,15 @@ def run():
 
     transformer = ImageTransformer(shape_img_resize)
     print("Applying image transformer to training images...")
-    imgs_train_transformed = apply_transformer(imgs_train, transformer, parallel=parallel)
+    imgs_train_transformed = apply_transformer(
+        imgs_train, transformer, parallel=parallel)
     print("Applying image transformer to test images...")
-    imgs_test_transformed = apply_transformer(imgs_test, transformer, parallel=parallel)
+    imgs_test_transformed = apply_transformer(
+        imgs_test, transformer, parallel=parallel)
 
     # Convert images to numpy array
-    X_train = np.array(imgs_train_transformed).reshape((-1,) + input_shape_model)
+    X_train = np.array(imgs_train_transformed).reshape(
+        (-1,) + input_shape_model)
     X_test = np.array(imgs_test_transformed).reshape((-1,) + input_shape_model)
     print(" -> X_train.shape = {}".format(X_train.shape))
     print(" -> X_test.shape = {}".format(X_test.shape))
@@ -139,9 +148,12 @@ def run():
     # Train (if necessary)
     if modelName in ["simpleAE", "convAE"]:
         if trainModel:
-            model.compile(loss="binary_crossentropy", optimizer="adam")
-            model.fit(X_train, n_epochs=n_epochs, batch_size=32)
-            model.save_models()
+            strategy = tf.distribute.MirroredStrategy()
+            print('Number of devices: {}'.format(strategy.num_replicas_in_sync))
+            with strategy.scope():
+                model.compile(loss="binary_crossentropy", optimizer="adam")
+                model.fit(X_train, n_epochs=n_epochs, batch_size=32)
+                model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
 
@@ -161,9 +173,11 @@ def run():
         print("Visualizing database image reconstructions...")
         imgs_train_reconstruct = model.decoder.predict(E_train)
         if modelName == "simpleAE":
-            imgs_train_reconstruct = imgs_train_reconstruct.reshape((-1,) + shape_img_resize)
+            imgs_train_reconstruct = imgs_train_reconstruct.reshape(
+                (-1,) + shape_img_resize)
         plot_reconstructions(imgs_train, imgs_train_reconstruct,
-                             os.path.join(outDir, "{}_reconstruct.png".format(modelName)),
+                             os.path.join(
+                                 outDir, "{}_reconstruct.png".format(modelName)),
                              range_imgs=[0, 255],
                              range_imgs_reconstruct=[0, 1])
 
@@ -175,10 +189,13 @@ def run():
     # Perform image retrieval on test images
     print("Performing image retrieval on test images...")
     for i, emb_flatten in enumerate(E_test_flatten):
-        _, indices = knn.kneighbors([emb_flatten])  # find k nearest train neighbours
+        # find k nearest train neighbours
+        _, indices = knn.kneighbors([emb_flatten])
         img_query = imgs_test[i]  # query image
-        imgs_retrieval = [imgs_train[idx] for idx in indices.flatten()]  # retrieval images
-        outFile = os.path.join(outDir, "{}_retrieval_{}.png".format(modelName, i))
+        imgs_retrieval = [imgs_train[idx]
+                          for idx in indices.flatten()]  # retrieval images
+        outFile = os.path.join(
+            outDir, "{}_retrieval_{}.png".format(modelName, i))
         plot_query_retrieval(img_query, imgs_retrieval, outFile)
 
     # Plot t-SNE visualization
@@ -186,7 +203,7 @@ def run():
     # outFile = os.path.join(outDir, "{}_tsne.png".format(modelName))
     # plot_tsne(E_train_flatten, imgs_train, outFile)
 
-from multiprocessing import freeze_support
+
 if __name__ == "__main__":
     freeze_support()
     run()
