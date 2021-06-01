@@ -19,6 +19,8 @@ from src.CV_transform_utils import resize_img, normalize_img
 from src.CV_plot_utils import plot_query_retrieval, plot_tsne, plot_reconstructions
 from src.autoencoder import AutoEncoder
 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
@@ -51,6 +53,7 @@ def run():
             "autoencoderFile": os.path.join(outDir, "{}_autoecoder.h5".format(modelName)),
             "encoderFile": os.path.join(outDir, "{}_encoder.h5".format(modelName)),
             "decoderFile": os.path.join(outDir, "{}_decoder.h5".format(modelName)),
+            "checkpoint" : os.path.join(outDir,"{}_checkpoint.h5".format(modelName))
         }
         model = AutoEncoder(modelName, info)
         model.set_arch()
@@ -153,8 +156,12 @@ def run():
                 strategy.num_replicas_in_sync))
             with strategy.scope():
                 model.compile(loss="binary_crossentropy", optimizer="adam")
-                model.fit(X_train, n_epochs=n_epochs, batch_size=32)
-                model.save_models()
+            
+            early_stopping = EarlyStopping(monitor="val_loss", mode="min", verbose=1,patience=6, min_delta=0.0001)
+            checkpoint = ModelCheckpoint(os.path.join(outDir,"{}_checkpoint.h5".format(modelName)))
+            
+            model.fit(X_train, n_epochs=n_epochs, batch_size=32)
+            model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
 
@@ -170,7 +177,7 @@ def run():
     print(" -> E_test_flatten.shape = {}".format(E_test_flatten.shape))
 
     # Make reconstruction visualizations
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
         print("Visualizing database image reconstructions...")
         imgs_train_reconstruct = model.decoder.predict(E_train)
         if modelName == "simpleAE":
