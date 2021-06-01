@@ -59,7 +59,7 @@ def run():
             shape_img_resize = shape_img
             input_shape_model = (model.encoder.input.shape[1],)
             output_shape_model = (model.encoder.output.shape[1],)
-            n_epochs = 300
+            n_epochs = 30
         elif modelName == "convAE":
             shape_img_resize = shape_img
             input_shape_model = tuple([int(x)
@@ -153,7 +153,7 @@ def run():
                 strategy.num_replicas_in_sync))
             with strategy.scope():
                 model.compile(loss="binary_crossentropy", optimizer="adam")
-                model.fit(X_train, n_epochs=n_epochs, batch_size=16)
+                model.fit(X_train, n_epochs=n_epochs, batch_size=32)
                 model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
