@@ -118,13 +118,13 @@ class AutoEncoder():
             x = keras.layers.UpSampling2D(size=2)(x)
             x = keras.layers.Conv2D(256, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=2)(x)
+            x = keras.layers.UpSampling2D(size=2)(x)
             x = keras.layers.Conv2D(128, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=2)(x)
+            x = keras.layers.UpSampling2D(size=2)(x)
             x = keras.layers.Conv2D(64, kernel_size=(
                 3, 3),  activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=2)(x)
+            x = keras.layers.UpSampling2D(size=2)(x)
             decoded = keras.layers.Conv2D(3, kernel_size=(
                 3, 3), padding="same", activation="sigmoid")(x)
         else:
@@ -158,14 +158,16 @@ class AutoEncoder():
             decoded_output = autoencoder.layers[-1](decoded_output)  # Conv2D
         elif self.modelName == "stackedAE":
             decoded_output = autoencoder.layers[-11](decoded_input)
-            decoded_output = autoencoder.layers[-9](decoded_input)
-            decoded_output = autoencoder.layers[-7](decoded_input)
-            decoded_output = autoencoder.layers[-6](decoded_input)
-            decoded_output = autoencoder.layers[-7](decoded_input)
-            decoded_output = autoencoder.layers[-4](decoded_input)
-            decoded_output = autoencoder.layers[-3](decoded_input)
-            decoded_output = autoencoder.layers[-2](decoded_input)
-            decoded_output = autoencoder.layers[-1](decoded_input)
+            decoded_output = autoencoder.layers[-10](decoded_output)
+            decoded_output = autoencoder.layers[-9](decoded_output)
+            decoded_output = autoencoder.layers[-8](decoded_output)
+            decoded_output = autoencoder.layers[-7](decoded_output)
+            decoded_output = autoencoder.layers[-6](decoded_output)
+            decoded_output = autoencoder.layers[-5](decoded_output)
+            decoded_output = autoencoder.layers[-4](decoded_output)
+            decoded_output = autoencoder.layers[-3](decoded_output)
+            decoded_output = autoencoder.layers[-2](decoded_output)
+            decoded_output = autoencoder.layers[-1](decoded_output)
 
         else:
             raise Exception("Invalid model name given!")
