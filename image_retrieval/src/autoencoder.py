@@ -91,16 +91,16 @@ class AutoEncoder():
                 3, 3), activation="relu", padding="same")(input)
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
-            x = keras.layers.Conv2D(128, kernel_size=(3, 3), strides=1, kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(128, kernel_size=(
+                3, 3), strides=1, activation="relu", padding="same")(x)
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
-            x = keras.layers.Conv2D(256, kernel_size=(3, 3), kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(256, kernel_size=(
+                3, 3), activation="relu", padding="same")(x)
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(512, kernel_size=(
+                3, 3), activation="relu", padding="same")(x)
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
             x = keras.layers.Conv2D(512, kernel_size=(
@@ -109,20 +109,20 @@ class AutoEncoder():
                 pool_size=(2, 2), strides=2, padding="same")(x)
 
             # decoder
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(encoded)
+            x = keras.layers.Conv2D(512, kernel_size=(
+                3, 3), activation="relu", padding="same")(encoded)
             x = keras.layers.UpSampling2D((2, 2))(x)
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(512, kernel_size=(
+                3, 3), activation="relu", padding="same")(x)
             x = keras.layers.UpSampling2D((2, 2))(x)
-            x = keras.layers.Conv2D(256, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(256, kernel_size=(
+                3, 3), activation="relu", padding="same")(x)
             x = keras.layers.UpSampling1D((2, 2))(x)
-            x = keras.layers.Conv2D(128, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(128, kernel_size=(
+                3, 3), activation="relu", padding="same")(x)
             x = keras.layers.UpSampling1D((2, 2))(x)
-            x = keras.layers.Conv2D(64, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
+            x = keras.layers.Conv2D(64, kernel_size=(
+                3, 3),  activation="relu", padding="same")(x)
             x = keras.layers.UpSampling1D((2, 2))(x)
             decoded = keras.layers.Conv2D(3, kernel_size=(
                 3, 3), padding="same", activation="sigmoid")(x)
