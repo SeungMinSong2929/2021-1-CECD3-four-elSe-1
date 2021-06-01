@@ -111,20 +111,20 @@ class AutoEncoder():
             # decoder
             x = keras.layers.Conv2D(512, kernel_size=(
                 3, 3), activation="relu", padding="same")(encoded)
-            x = keras.layers.UpSampling2D(size=(2, 2))(x)
+            x = keras.layers.UpSampling2D(size=2)(x)
             x = keras.layers.Conv2D(512, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
 
-            x = keras.layers.UpSampling2D(size=(2, 2))(x)
+            x = keras.layers.UpSampling2D(size=2)(x)
             x = keras.layers.Conv2D(256, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=(2, 2))(x)
+            x = keras.layers.UpSampling1D(size=2)(x)
             x = keras.layers.Conv2D(128, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=(2, 2))(x)
+            x = keras.layers.UpSampling1D(size=2)(x)
             x = keras.layers.Conv2D(64, kernel_size=(
                 3, 3),  activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D(size=(2, 2))(x)
+            x = keras.layers.UpSampling1D(size=2)(x)
             decoded = keras.layers.Conv2D(3, kernel_size=(
                 3, 3), padding="same", activation="sigmoid")(x)
         else:
