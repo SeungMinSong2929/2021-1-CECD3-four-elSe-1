@@ -69,7 +69,7 @@ def run():
                                        for x in model.encoder.input.shape[1:]])
             output_shape_model = tuple(
                 [int(x) for x in model.encoder.output.shape[1:]])
-            n_epochs = 30
+            n_epochs = 100 
         else:
             raise Exception("Invalid modelName!")
 
@@ -158,9 +158,13 @@ def run():
                 model.compile(loss="binary_crossentropy", optimizer="adam")
             
             early_stopping = EarlyStopping(monitor="val_loss", mode="min", verbose=1,patience=6, min_delta=0.0001)
-            checkpoint = ModelCheckpoint(os.path.join(outDir,"{}_checkpoint.h5".format(modelName)))
+            checkpoint = ModelCheckpoint(
+                    os.path.join(outDir,"{}_checkpoint.h5".format(modelName)),
+                    monitor="val_loss",
+                    mode="min",
+                    save_best_only=True)
             
-            model.fit(X_train, n_epochs=n_epochs, batch_size=32)
+            model.fit(X_train, n_epochs=n_epochs, batch_size=32,callbacks=[early_stopping, checkpoint])
             model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
