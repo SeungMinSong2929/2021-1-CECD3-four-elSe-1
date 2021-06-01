@@ -22,7 +22,7 @@ from src.autoencoder import AutoEncoder
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "simpleAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "stackedAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -43,7 +43,7 @@ def run():
     print("Image shape = {}".format(shape_img))
 
     # Build models
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
 
         # Set up autoencoder
         info = {
@@ -60,7 +60,7 @@ def run():
             input_shape_model = (model.encoder.input.shape[1],)
             output_shape_model = (model.encoder.output.shape[1],)
             n_epochs = 30
-        elif modelName == "convAE":
+        elif modelName in ["convAE", "stackedAE"]:
             shape_img_resize = shape_img
             input_shape_model = tuple([int(x)
                                        for x in model.encoder.input.shape[1:]])
@@ -146,7 +146,7 @@ def run():
     print(" -> X_test.shape = {}".format(X_test.shape))
 
     # Train (if necessary)
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
         if trainModel:
             strategy = tf.distribute.MirroredStrategy()
             print('Number of devices: {}'.format(
