@@ -1,7 +1,9 @@
+
 import keras
 from src.utils import split
 import tensorflow as tf
 import numpy as np
+
 """
 
  autoencoder.py  (author: Anson Wong / git: ankonzoid)

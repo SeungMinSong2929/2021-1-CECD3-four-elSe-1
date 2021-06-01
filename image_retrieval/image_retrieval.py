@@ -130,7 +130,7 @@ def run():
             img_transformed = normalize_img(img_transformed)
             return img_transformed
 
-    transformer = Image Transformer(shape_img_resize)
+    transformer = ImageTransformer(shape_img_resize)
     print("Applying image transformer to training images...")
     imgs_train_transformed = apply_transformer(
         imgs_train, transformer, parallel=parallel)
@@ -153,7 +153,7 @@ def run():
                 strategy.num_replicas_in_sync))
             with strategy.scope():
                 model.compile(loss="binary_crossentropy", optimizer="adam")
-                model.fit(X_train, n_epochs=n_epochs, batch_size=32)
+                model.fit(X_train, n_epochs=n_epochs, batch_size=16)
                 model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
