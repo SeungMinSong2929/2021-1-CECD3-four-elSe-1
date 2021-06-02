@@ -24,7 +24,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 def run():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "stackedAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "IncepResNet"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -77,6 +77,8 @@ def run():
 
         # Load pre-trained VGG19 model + higher level layers
         print("Loading VGG19 pre-trained model...")
+
+
         model = keras.applications.VGG19(weights='imagenet', include_top=False,
                                          input_shape=shape_img)
 
