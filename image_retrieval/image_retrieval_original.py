@@ -18,7 +18,6 @@ from src.CV_transform_utils import apply_transformer
 from src.CV_transform_utils import resize_img, normalize_img
 from src.CV_plot_utils import plot_query_retrieval, plot_tsne, plot_reconstructions
 from src.autoencoder import AutoEncoder
-from src.pretrained_model import Pretrained_Model
 
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
@@ -76,11 +75,47 @@ def run():
         else:
             raise Exception("Invalid modelName!")
 
-    elif modelName in ["vgg19", "ResNet50v2", "IncepResNet"]:
-        pretrainedModel = Pretrained_Model(modelName,shape_img)
-        model = pretrainedModel.buildModel()
-        shape_img_resize, input_shape_model, output_shape_model = pretrainedModel.makeInOut()
-       
+    elif modelName in ["vgg19"]:
+
+        # Load pre-trained VGG19 model + higher level layers
+        print("Loading VGG19 pre-trained model...")
+        model = keras.applications.VGG19(weights='imagenet', include_top=False,
+                                         input_shape=shape_img)
+
+        model.summary()
+
+        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
+        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
+        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
+        n_epochs = None
+    elif modelName in ["ResNet50v2"]:
+        print("Loading ResNet50v2 pre-trained model...")
+        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
+        #                                     input_shape=shape_img)
+
+        model = keras.applications.ResNet50V2(
+            weights="imagenet", include_top=False, input_shape=shape_img)
+
+        model.summary()
+
+        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
+        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
+        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
+        n_epochs = None
+    elif modelName in ["IncepResNet"]:
+        print("Loading IncepResNet pre-trained model...")
+        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
+        #                                     input_shape=shape_img)
+
+        model = keras.applications.InceptionResNetV2(
+            weights="imagenet", include_top=False, input_shape=shape_img)
+
+        model.summary()
+
+        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
+        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
+        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
+        n_epochs = None
 
     else:
         raise Exception("Invalid modelName!")
