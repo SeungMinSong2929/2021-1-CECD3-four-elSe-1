@@ -2,7 +2,7 @@
 hello
 
 
-##How to run object detection
+How to run object detection
 
 download "resnet50_coco_best_v2.1.0.h5" 
 
