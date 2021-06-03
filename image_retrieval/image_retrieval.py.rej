@@ -1,0 +1,6 @@
+diff a/image_retrieval/image_retrieval.py b/image_retrieval/image_retrieval.py	(rejected hunks)
+@@ -185,3 +185,4 @@
+ 
+ if __name__ == "__main__":
+     freeze_support()
++    image_retrieval()

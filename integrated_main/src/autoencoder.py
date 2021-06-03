@@ -91,18 +91,6 @@ class AutoEncoder():
                 3, 3), activation="relu", padding="same")(input)
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
-<<<<<<< HEAD
-            x = keras.layers.Conv2D(128, kernel_size=(3, 3), strides=1, kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.MaxPooling2D(
-                pool_size=(2, 2), strides=2, padding="same")(x)
-            x = keras.layers.Conv2D(256, kernel_size=(3, 3), kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.MaxPooling2D(
-                pool_size=(2, 2), strides=2, padding="same")(x)
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.regularizers.l2(
-                0.001), activation="relu", padding="same")(x)
-=======
             x = keras.layers.Conv2D(128, kernel_size=(
                 3, 3), strides=1, activation="relu", padding="same")(x)
             x = keras.layers.MaxPooling2D(
@@ -113,7 +101,6 @@ class AutoEncoder():
                 pool_size=(2, 2), strides=2, padding="same")(x)
             x = keras.layers.Conv2D(512, kernel_size=(
                 3, 3), activation="relu", padding="same")(x)
->>>>>>> Kim_linux
             x = keras.layers.MaxPooling2D(
                 pool_size=(2, 2), strides=2, padding="same")(x)
             x = keras.layers.Conv2D(512, kernel_size=(
@@ -122,23 +109,6 @@ class AutoEncoder():
                 pool_size=(2, 2), strides=2, padding="same")(x)
 
             # decoder
-<<<<<<< HEAD
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(encoded)
-            x = keras.layers.UpSampling2D((2, 2))(x)
-            x = keras.layers.Conv2D(512, kernel_size=(3, 3), kernel_initializer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling2D((2, 2))(x)
-            x = keras.layers.Conv2D(256, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D((2, 2))(x)
-            x = keras.layers.Conv2D(128, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D((2, 2))(x)
-            x = keras.layers.Conv2D(64, kernel_size=(3, 3), kernel_regularizer=keras.initializers.l2(
-                0.001), activation="relu", padding="same")(x)
-            x = keras.layers.UpSampling1D((2, 2))(x)
-=======
             x = keras.layers.Conv2D(512, kernel_size=(
                 3, 3), activation="relu", padding="same")(encoded)
             x = keras.layers.UpSampling2D(size=2)(x)
@@ -155,7 +125,6 @@ class AutoEncoder():
             x = keras.layers.Conv2D(64, kernel_size=(
                 3, 3),  activation="relu", padding="same")(x)
             x = keras.layers.UpSampling2D(size=2)(x)
->>>>>>> Kim_linux
             decoded = keras.layers.Conv2D(3, kernel_size=(
                 3, 3), padding="same", activation="sigmoid")(x)
         else:
@@ -189,16 +158,6 @@ class AutoEncoder():
             decoded_output = autoencoder.layers[-1](decoded_output)  # Conv2D
         elif self.modelName == "stackedAE":
             decoded_output = autoencoder.layers[-11](decoded_input)
-<<<<<<< HEAD
-            decoded_output = autoencoder.layers[-9](decoded_input)
-            decoded_output = autoencoder.layers[-7](decoded_input)
-            decoded_output = autoencoder.layers[-6](decoded_input)
-            decoded_output = autoencoder.layers[-7](decoded_input)
-            decoded_output = autoencoder.layers[-4](decoded_input)
-            decoded_output = autoencoder.layers[-3](decoded_input)
-            decoded_output = autoencoder.layers[-2](decoded_input)
-            decoded_output = autoencoder.layers[-1](decoded_input)
-=======
             decoded_output = autoencoder.layers[-10](decoded_output)
             decoded_output = autoencoder.layers[-9](decoded_output)
             decoded_output = autoencoder.layers[-8](decoded_output)
@@ -209,7 +168,6 @@ class AutoEncoder():
             decoded_output = autoencoder.layers[-3](decoded_output)
             decoded_output = autoencoder.layers[-2](decoded_output)
             decoded_output = autoencoder.layers[-1](decoded_output)
->>>>>>> Kim_linux
 
         else:
             raise Exception("Invalid model name given!")
