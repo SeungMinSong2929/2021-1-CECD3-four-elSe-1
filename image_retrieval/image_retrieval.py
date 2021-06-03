@@ -23,7 +23,7 @@ from src.pretrained_model import Pretrained_Model
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 
-def run():
+def image_retrieval():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
     modelName = "IncepResNet"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
@@ -185,4 +185,4 @@ def run():
 
 if __name__ == "__main__":
     freeze_support()
-    run()
+    image_retrieval()
