@@ -56,10 +56,10 @@ labels_to_num = [0]*len(labels_to_names_seq)
 # load image dataset
 
     
-def object_detection(model, image_array, dataset_path,output_path):
+def object_detection(model, inputData_list, dataset_path,output_path):
 
 
-    for img_name in image_array:
+    for img_name in inputData_list:
         print("handling "+img_name)
         imagePath = dataset_path + img_name
         image = read_image_bgr(imagePath)
