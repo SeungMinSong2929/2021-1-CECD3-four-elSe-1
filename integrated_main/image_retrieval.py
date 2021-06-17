@@ -30,8 +30,8 @@ def image_retrieval(modelName, trainModel, parallel):
 #     parallel = False  # use multicore processing
 
     # Make paths
-    dataTrainDir = os.path.join(os.getcwd(), "retrieval_data", "train")
-    dataTestDir = os.path.join(os.getcwd(), "retrieval_data", "test")
+    dataTrainDir = os.path.join(os.getcwd(), "detected_data", "detected_from_train")
+    dataQueryDir = os.path.join(os.getcwd(), "detected_data", "detected_from_test")
     outDir = os.path.join(os.getcwd(), "retrieval_output", modelName)
     if not os.path.exists(outDir):
         os.makedirs(outDir)
@@ -40,8 +40,8 @@ def image_retrieval(modelName, trainModel, parallel):
     extensions = [".jpg", ".jpeg"]
     print("Reading train images from '{}'...".format(dataTrainDir))
     imgs_train = read_imgs_dir(dataTrainDir, extensions, parallel=parallel)
-    print("Reading test images from '{}'...".format(dataTestDir))
-    imgs_test = read_imgs_dir(dataTestDir, extensions, parallel=parallel)
+    print("Reading test images from '{}'...".format(dataQueryDir))
+    imgs_test = read_imgs_dir(dataQueryDir, extensions, parallel=parallel)
     shape_img = imgs_train[0].shape
     print("Image shape = {}".format(shape_img))
 
@@ -185,4 +185,4 @@ def image_retrieval(modelName, trainModel, parallel):
 
 if __name__ == "__main__":
     freeze_support()
-    image_retrieval()
+    image_retrieval(modelName="ResNet50v2", trainModel=False, parallel=False)

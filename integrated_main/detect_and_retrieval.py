@@ -58,4 +58,4 @@ for path in tqdm(images_path):
 #     modelName = "IncepResNet"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet", "ResNet50v2"
 #     trainModel = True
 #     parallel = False  # use multicore processing
-image_retrieval(modelName="ResNet50v2",trainModel=True, parallel=False)
+# image_retrieval(modelName="ResNet50v2",trainModel=True, parallel=False)
