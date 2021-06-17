@@ -18,11 +18,14 @@ from src.CV_transform_utils import apply_transformer
 from src.CV_transform_utils import resize_img, normalize_img
 from src.CV_plot_utils import plot_query_retrieval, plot_tsne, plot_reconstructions
 from src.autoencoder import AutoEncoder
+from src.pretrained_model import Pretrained_Model
+
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 
-def run():
+def image_retrieval():
     # Run mode: (autoencoder -> simpleAE, convAE) or (transfer learning -> vgg19)
-    modelName = "simpleAE"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
+    modelName = "IncepResNet"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet"
     trainModel = True
     parallel = False  # use multicore processing
 
@@ -42,8 +45,10 @@ def run():
     shape_img = imgs_train[0].shape
     print("Image shape = {}".format(shape_img))
 
+    strategy = tf.distribute.MirroredStrategy()
+
     # Build models
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
 
         # Set up autoencoder
         info = {
@@ -51,6 +56,7 @@ def run():
             "autoencoderFile": os.path.join(outDir, "{}_autoecoder.h5".format(modelName)),
             "encoderFile": os.path.join(outDir, "{}_encoder.h5".format(modelName)),
             "decoderFile": os.path.join(outDir, "{}_decoder.h5".format(modelName)),
+            "checkpoint" : os.path.join(outDir,"{}_checkpoint.h5".format(modelName))
         }
         model = AutoEncoder(modelName, info)
         model.set_arch()
@@ -59,58 +65,22 @@ def run():
             shape_img_resize = shape_img
             input_shape_model = (model.encoder.input.shape[1],)
             output_shape_model = (model.encoder.output.shape[1],)
-            n_epochs = 300
-        elif modelName == "convAE":
+            n_epochs = 30
+        elif modelName in ["convAE", "stackedAE"]:
             shape_img_resize = shape_img
             input_shape_model = tuple([int(x)
                                        for x in model.encoder.input.shape[1:]])
             output_shape_model = tuple(
                 [int(x) for x in model.encoder.output.shape[1:]])
-            n_epochs = 30
+            n_epochs = 100 
         else:
             raise Exception("Invalid modelName!")
 
-    elif modelName in ["vgg19"]:
-
-        # Load pre-trained VGG19 model + higher level layers
-        print("Loading VGG19 pre-trained model...")
-        model = keras.applications.VGG19(weights='imagenet', include_top=False,
-                                         input_shape=shape_img)
-
-        model.summary()
-
-        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
-        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
-        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
-        n_epochs = None
-    elif modelName in ["ResNet50v2"]:
-        print("Loading VGG19 pre-trained model...")
-        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
-        #                                     input_shape=shape_img)
-
-        model = keras.applications.ResNet50V2(
-            weights="imagenet", include_top=False, input_shape=shape_img)
-
-        model.summary()
-
-        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
-        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
-        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
-        n_epochs = None
-    elif modelName in ["IncepResNet"]:
-        print("Loading VGG19 pre-trained model...")
-        # model = tf.keras.applications.VGG19(weights='imagenet', include_top=False,
-        #                                     input_shape=shape_img)
-
-        model = keras.applications.InceptionResNetV2(
-            weights="imagenet", include_top=False, input_shape=shape_img)
-
-        model.summary()
-
-        shape_img_resize = tuple([int(x) for x in model.input.shape[1:]])
-        input_shape_model = tuple([int(x) for x in model.input.shape[1:]])
-        output_shape_model = tuple([int(x) for x in model.output.shape[1:]])
-        n_epochs = None
+    elif modelName in ["vgg19", "ResNet50v2", "IncepResNet"]:
+        pretrainedModel = Pretrained_Model(modelName,shape_img)
+        model = pretrainedModel.buildModel()
+        shape_img_resize, input_shape_model, output_shape_model = pretrainedModel.makeInOut()
+       
 
     else:
         raise Exception("Invalid modelName!")
@@ -130,7 +100,7 @@ def run():
             img_transformed = normalize_img(img_transformed)
             return img_transformed
 
-    transformer = Image Transformer(shape_img_resize)
+    transformer = ImageTransformer(shape_img_resize)
     print("Applying image transformer to training images...")
     imgs_train_transformed = apply_transformer(
         imgs_train, transformer, parallel=parallel)
@@ -146,15 +116,23 @@ def run():
     print(" -> X_test.shape = {}".format(X_test.shape))
 
     # Train (if necessary)
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
         if trainModel:
-            strategy = tf.distribute.MirroredStrategy()
+            
             print('Number of devices: {}'.format(
                 strategy.num_replicas_in_sync))
             with strategy.scope():
                 model.compile(loss="binary_crossentropy", optimizer="adam")
-                model.fit(X_train, n_epochs=n_epochs, batch_size=32)
-                model.save_models()
+            
+            early_stopping = EarlyStopping(monitor="val_loss", mode="min", verbose=1,patience=6, min_delta=0.0001)
+            checkpoint = ModelCheckpoint(
+                    os.path.join(outDir,"{}_checkpoint.h5".format(modelName)),
+                    monitor="val_loss",
+                    mode="min",
+                    save_best_only=True)
+            
+            model.fit(X_train, n_epochs=n_epochs, batch_size=32,callbacks=[early_stopping, checkpoint])
+            model.save_models()
         else:
             model.load_models(loss="binary_crossentropy", optimizer="adam")
 
@@ -170,7 +148,7 @@ def run():
     print(" -> E_test_flatten.shape = {}".format(E_test_flatten.shape))
 
     # Make reconstruction visualizations
-    if modelName in ["simpleAE", "convAE"]:
+    if modelName in ["simpleAE", "convAE", "stackedAE"]:
         print("Visualizing database image reconstructions...")
         imgs_train_reconstruct = model.decoder.predict(E_train)
         if modelName == "simpleAE":
@@ -207,4 +185,4 @@ def run():
 
 if __name__ == "__main__":
     freeze_support()
-    run()
+    image_retrieval()
