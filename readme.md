@@ -35,8 +35,8 @@
   |- detected_from_test : original_test에서 탐지한 객체들   
   |- detected_from_test : original_train에서 탐지한 유사객체 DB   
  |- retrieval_output : 유사이미지 검색결과   
- |
- |
+ |  
+ |  
  |- image_retrieval.py : 유사이미지 검색 모듈   
  |- object_detection.py : 객체탐지 모듈   
 
