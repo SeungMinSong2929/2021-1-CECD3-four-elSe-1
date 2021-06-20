@@ -65,8 +65,9 @@
 
     ├── retrieval_output : 유사이미지 검색 결과를 저장하는 디렉토리
     ├── image_retrieval.py : 유사이미지 검색 모듈
-    └── object_detection.py : 객체탐지 모듈
-
+    ├── object_detection.py : 객체탐지 모듈
+    ├── makeDB.py : 검색 대상이 될 유사 객체 DB 생성 
+    └── detect_and_retrieval.py : test input 이미지에서 객체를 탐지하고 유사 객체를 검색
 
 ```
 
