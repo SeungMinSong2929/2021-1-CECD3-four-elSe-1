@@ -24,7 +24,7 @@
 - 모두 설치 후, integrated_main폴더에서 터미널로 python main.py 실행
 
 # dataset
-- [구글 드라이브 다운로드 링크]<https://drive.google.com/drive/folders/1LUcWabcn_bu5u9iSkQN7LKuIzLStX832?usp=sharing>
+- [구글 드라이브 다운로드 링크](https://docs.google.com/uc?export=download&id=1LUcWabcn_bu5u9iSkQN7LKuIzLStX832?usp=sharing)
 - integrated_main의 original_test, original_train에 붙여넣기
 
 # Configuration
@@ -43,5 +43,6 @@
 
 
 # 실행순서
-1. python makeDB.py 혹은 makeDB.ipynb 순차적으로 실행
-2. python detected_and_retrieval.py 혹은 detected_and_retrieval.ipynb 순차적으로 실행
+1. integrated_main 폴더에서 실행
+2. python makeDB.py 혹은 makeDB.ipynb 순차적으로 실행
+3. python detected_and_retrieval.py 혹은 detected_and_retrieval.ipynb 순차적으로 실행
