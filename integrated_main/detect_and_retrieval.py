@@ -11,6 +11,7 @@ import pickle
 
 from PIL import Image
 
+
 # import keras
 import keras
 
@@ -29,18 +30,18 @@ os.path.join('./keras-retinanet', 'snapshots', 'resnet50_coco_best_v2.1.0.h5')
 
 model_path = os.path.join('./keras-retinanet', 'snapshots', 'resnet50_coco_best_v2.1.0.h5')
 
-#데이터셋 경로
-dataset_path = "./original_train/"
-output_path = "./detected_data/detected_from_train/"
+dataset_path = "./original_test/"
+output_path = "./detected_data/detected_from_test/"
+
 
 retina_model = models.load_model(model_path, backbone_name='resnet50')
 os.chdir(dataset_path)
-inputData_list = os.listdir(os.getcwd())
+dataset_list = os.listdir(os.getcwd())
 os.chdir('../')
 
 
 from object_detection import object_detection
-object_detection(retina_model, inputData_list, dataset_path, output_path)
+object_detection(retina_model, dataset_list, dataset_path, output_path)
 
 from image_retrieval import image_retrieval
 from tqdm import tqdm
@@ -52,9 +53,8 @@ for path in tqdm(images_path):
     image_resized = image_pil.resize((512,512))
     image_resized.save(path)
     
-    
 # try: "simpleAE", "convAE", "vgg19" , "IncepResNet", "ResNet50v2"
 #     modelName = "IncepResNet"  # try: "simpleAE", "convAE", "vgg19" , "IncepResNet", "ResNet50v2"
 #     trainModel = True
 #     parallel = False  # use multicore processing
-# image_retrieval(modelName="ResNet50v2",trainModel=True, parallel=False)
+image_retrieval(modelName="ResNet50v2",trainModel=True, parallel=False)
