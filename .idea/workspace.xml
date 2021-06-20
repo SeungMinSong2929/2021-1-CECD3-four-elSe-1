@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e0cd433-be73-4349-83ad-badfdcab0a76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/image_retrieval/image_retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_retrieval/image_retrieval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/데이터셋 관련 문제.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +75,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
