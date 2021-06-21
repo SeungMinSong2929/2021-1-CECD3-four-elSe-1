@@ -1,6 +1,3 @@
-  
-  
-
 # 팀원
 
 - 김희수: 팀장, 유사이미지 검색 모듈 개발
@@ -10,10 +7,6 @@
 - 박범수: 객체탐지 모듈 개발
 
 - 전문수: auto labeling, annotation
-
-  
-  
-  
 
 # 개발환경
 
@@ -41,17 +34,11 @@
 
 - tqdm
 
-- 모두 설치 후, integrated_main폴더에서 터미널로 python main.py 실행
-
-  
-
 # dataset
 
--  [구글 드라이브 다운로드 링크](https://drive.google.com/drive/folders/1LUcWabcn_bu5u9iSkQN7LKuIzLStX832?usp=sharing)
+- [구글 드라이브 다운로드 링크](https://drive.google.com/drive/folders/1LUcWabcn_bu5u9iSkQN7LKuIzLStX832?usp=sharing)
 
 - integrated_main의 original_test, original_train에 붙여넣기
-
-  
 
 # Configuration
 
@@ -61,18 +48,15 @@
     ├── original_train : 유사 객체 DB를 생성하기 위한 train input 이미지 디렉토리
     ├── deteted_data
          ├── detected_from_test : original_test에서 탐지한 객체들
-         └── detect_from_train :  original_train에서 탐지한 유사객체 DB   
+         └── detect_from_train :  original_train에서 탐지한 유사객체 DB
 
     ├── retrieval_output : 유사이미지 검색 결과를 저장하는 디렉토리
     ├── image_retrieval.py : 유사이미지 검색 모듈
     ├── object_detection.py : 객체탐지 모듈
-    ├── makeDB.py : 검색 대상이 될 유사 객체 DB 생성 
+    ├── makeDB.py : 검색 대상이 될 유사 객체 DB 생성
     └── detect_and_retrieval.py : test input 이미지에서 객체를 탐지하고 유사 객체를 검색
 
 ```
-
-  
-  
 
 # 실행순서
 
