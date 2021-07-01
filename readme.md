@@ -1,3 +1,4 @@
+
 # 팀원
 
 - 김희수: 팀장, 유사이미지 검색 모듈 개발
@@ -65,3 +66,4 @@
 2. python makeDB.py 혹은 makeDB.ipynb 순차적으로 실행
 
 3. python detected_and_retrieval.py 혹은 detected_and_retrieval.ipynb 순차적으로 실행
+
